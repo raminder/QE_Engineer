@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import config.Configuration;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,18 +15,29 @@ import resources.Utils;
 import support.People;
 import support.Results;
 
-public class Search extends Utils {
+public class SearchResults {
 	private Response response;
 
-	@Given("user calls {string} with {string} as search term")
-	public void user_calls_with_as_search_term(String people, String searchTerm) {
-		response = given().spec(requestSpecification()).queryParam("search", searchTerm).when().get(people).then()
-				.extract().response();
+	@Given("user calls {string} {string} api with {string} as search term")
+	public void user_calls_api_with_as_search_term(String requestType, String request, String searchTerm) {
+		if (request.contains("people") && requestType.equalsIgnoreCase("valid")) {
+			response = given().spec(Utils.requestSpecification()).queryParam("search", searchTerm).when()
+					.get(Configuration.getPeopleUri()).then().extract().response();
+		} else if (request.contains("people") && requestType.equalsIgnoreCase("invalid")) {
+			response = given().spec(Utils.requestSpecification()).queryParam("search", searchTerm).when()
+					.get(Configuration.getInvalidPeopleUri()).then().extract().response();
+		} else if (request.contains("planet") && requestType.equalsIgnoreCase("valid")) {
+			response = given().spec(Utils.requestSpecification()).queryParam("search", searchTerm).when()
+					.get(Configuration.getPlanetUri()).then().extract().response();
+		} else {
+			response = given().spec(Utils.requestSpecification()).queryParam("search", searchTerm).when()
+					.get(Configuration.getInvalidPlanetUri()).then().extract().response();
+		}
 	}
 
 	@Then("api response got success with a status code {int}")
 	public void api_response_got_success_with_a_status_code(int code) {
-		verifyStatusCode(response, code);
+		Utils.verifyStatusCode(response, code);
 	}
 
 	@And("user should see {string} result containing {string} in name")

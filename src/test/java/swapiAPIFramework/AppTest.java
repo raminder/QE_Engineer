@@ -1,4 +1,4 @@
-package dev.swapi.SwapiAPIFramework;
+package swapiAPIFramework;
 
 import static org.junit.Assert.assertTrue;
 

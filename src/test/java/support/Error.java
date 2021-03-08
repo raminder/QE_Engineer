@@ -1,6 +1,6 @@
 package support;
 
-public class NoResult {
+public class Error {
 
 	private String detail;
 
