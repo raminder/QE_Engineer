@@ -23,7 +23,7 @@ public class GetStarCharacters extends Utils {
 
 	@Then("api response got success with status code {int}")
 	public void api_response_got_success_with_status_code(int code) {
-		assertEquals(response.getStatusCode(), code);
+		verifyStatusCode(response, code);
 	}
 
 	@Then("user should see {string} star war character details")
